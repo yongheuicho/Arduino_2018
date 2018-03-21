@@ -11,7 +11,6 @@ void loop() {
   // put your main code here, to run repeatedly:
   String sInput = inputString();
   if (sInput.length() > 0) {  // Not empty?
-    Serial.println(sInput);
     double ans = processString(sInput);
     printString(ans);
   }
@@ -26,7 +25,14 @@ String inputString() {
 
 double processString(String sInput) {
   double ans = 0.;
-  StringTok stToken;
+  StringTok stInput(sInput);
+  StringTok stToken1, stToken2, stToken3;
+  stToken1 = stInput.getToken();
+  stToken2 = stInput.getToken();
+  stToken3 = stInput.getToken();
+  Serial.println(stToken1.toString());
+  Serial.println(stToken2.toString());
+  Serial.println(stToken3.toString());
   return ans;
 }
 
