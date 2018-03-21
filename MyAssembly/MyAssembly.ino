@@ -1,6 +1,6 @@
 #include <StringTok.h>
 #define SERIAL_BPS  (9600)
-#define DELAY_MS  (500)
+#define DELAY_MS  (2000)
 
 void setup() {
   // put your setup code here, to run once:
@@ -10,14 +10,18 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   String sInput = inputString();
-  double ans = processString(sInput);
-  printString(ans);
+  if (sInput.length() > 0) {  // Not empty?
+    Serial.println(sInput);
+    double ans = processString(sInput);
+    printString(ans);
+  }
   delay(DELAY_MS);
 }
 
 String inputString() {
-  String sInput;
-  return sInput;
+  StringTok stInput;
+  stInput.inputSerial();
+  return stInput.toString();
 }
 
 double processString(String sInput) {
