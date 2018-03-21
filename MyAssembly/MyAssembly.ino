@@ -30,9 +30,10 @@ double processString(String sInput) {
   stToken1 = stInput.getToken();
   stToken2 = stInput.getToken();
   stToken3 = stInput.getToken();
-  Serial.println(stToken1.toString());
-  Serial.println(stToken2.toString());
-  Serial.println(stToken3.toString());
+  if (stToken1.toString() == "add")
+    ans = funAdd(stToken2.atof(), stToken3.atof());
+  else if (stToken1.toString() == "sub")
+    ans = funSub(stToken2.atof(), stToken3.atof());
   return ans;
 }
 
