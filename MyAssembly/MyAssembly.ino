@@ -28,8 +28,8 @@ double processString(String sInput) {
   StringTok stInput(sInput);
   StringTok stToken1, stToken2, stToken3;
   stToken1 = stInput.getToken();
-  stToken2 = stInput.getToken();
-  stToken3 = stInput.getToken();
+  stToken2 = stInput.getTokenNum();
+  stToken3 = stInput.getTokenNum();
   if (stToken1.toString() == "add")
     ans = funAdd(stToken2.atof(), stToken3.atof());
   else if (stToken1.toString() == "sub")
