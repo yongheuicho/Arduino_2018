@@ -51,9 +51,9 @@ double getVar(double arVolt[], int nSize, double avg) {
   return sum/(double)nSize;
 }
 
-void printVolt(double volt, double noise) {
+void printVolt(double volt, double noisePow) {
   Serial.print("전압 = ");  Serial.println(volt);
-  Serial.print("잡음 = ");  Serial.println(noise, 10);
+  Serial.print("잡음 전력 = ");  Serial.println(noisePow, 10);
 }
 
 void printArrayVolt(double arVolt[], int nSize) {
