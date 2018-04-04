@@ -3,6 +3,10 @@
 /////////////////////////////////////////////
 #include <StringTok.h>
 #define NUM_SENSOR_ARD  (3)
+#define SERIAL_BPS    (9600)
+#define SERIAL_BTH_BPS  (115200)
+#define ARD_BTH_RX    (10)
+#define ARD_BTH_TX    (11)
 
 // Sensor 설정값, 측정값
 class MySensor {
@@ -22,6 +26,7 @@ class MyProtocol {
 // 전역 변수(global variables)
 MySensor g_mySensor;
 MyProtocol g_myProtocol;
+SoftwareSerial serialBth(ARD_BTH_RX, ARD_BTH_TX);
 
 void setup() {
   // put your setup code here, to run once:
@@ -40,6 +45,7 @@ void loop() {
   serialCommTx(sSensor);
   // Rx
   sSensor = bthCommRx();
+  serialCommTx(sSensor);
   sensorProtocolRx(sSensor, g_myProtocol);
 }
 
@@ -66,11 +72,11 @@ void initProtocol(MyProtocol & myProtocol) {
 }
 
 void initSerial() {
-
+  Serial.begin(SERIAL_BPS);
 }
 
 void initBth() {
-
+  serialBth.begin(SERIAL_BTH_BPS);
 }
 
 void sensorMeas(MySensor & mySensor, MyProtocol & myProtocol) {
@@ -83,11 +89,11 @@ String sensorProtocolTx(MySensor & mySensor, MyProtocol & myProtocol) {
 }
 
 void bthCommTx(String & sSensor) {
-
+  serialBth.println(sSensor);
 }
 
 void serialCommTx(String & sSensor) {
-
+  Serial.println(sSensor);
 }
 
 void sensorProtocolRx(String & sSensor, MyProtocol & myProtocol) {
@@ -95,6 +101,7 @@ void sensorProtocolRx(String & sSensor, MyProtocol & myProtocol) {
 }
 
 String bthCommRx() {
-  String sSensor;
-  return sSensor;
+  StringTok sInputBth;
+  sInputBth.inputSerial(serialBth);
+  return sInputBth.toString();
 }
