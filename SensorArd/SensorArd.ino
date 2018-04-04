@@ -1,11 +1,19 @@
+#include <StringTok.h>
+#define NUM_SENSOR_ARD  (3)
+
 // Sensor 설정값, 측정값
 class MySensor {
   public:
-    double m_val1;
+    int m_nPort[NUM_SENSOR_ARD];
+    boolean m_bPort[NUM_SENSOR_ARD];
+    double m_val1[NUM_SENSOR_ARD];
+    double m_val2[NUM_SENSOR_ARD];
 };
 
 class MyProtocol {
   public:
+    boolean m_bStart; // true: 통신 mode, false: 설정 mode
+    int m_nDelay, m_nAvgSize, m_nDelayAvg;  
 };
 
 // 전역 변수(global variables)
