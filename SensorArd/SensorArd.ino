@@ -48,6 +48,8 @@ void loop() {
   sSensor = bthCommRx();
   serialCommTx(sSensor);
   sensorProtocolRx(sSensor, g_myProtocol);
+  // Delay
+  delay(g_myProtocol.m_nDelay);
 }
 
 void initSensor(MySensor & mySensor) {
@@ -112,7 +114,14 @@ double getSensor2(MySensor & mySensor, MyProtocol & myProtocol) {
 }
 
 String sensorProtocolTx(MySensor & mySensor, MyProtocol & myProtocol) {
-  String sSensor;
+  if (!myProtocol.m_bStart) return "";
+  String sSensor; 
+  if (mySensor.m_bPort[0])  // Sensor #0?
+    sSensor = "getsen 0 " + String(mySensor.m_val1[0], 5) + "\n";  
+  if (mySensor.m_bPort[1])  // Sensor #1?
+    sSensor = "getsen 1 " + String(mySensor.m_val1[1], 5) + "\n";  
+  if (mySensor.m_bPort[2])  // Sensor #2?
+    sSensor = "getsen 2 " + String(mySensor.m_val1[2], 5) + "\n";        
   return sSensor;
 }
 
@@ -125,7 +134,12 @@ void serialCommTx(String & sSensor) {
 }
 
 void sensorProtocolRx(String & sSensor, MyProtocol & myProtocol) {
-
+  if (sSensor.length() <= 0)  return;
+  StringTok sInput(sSensor);
+  StringTok sToken;
+  sToken = sInput.getToken();
+  if (sToken.toString() == "start") myProtocol.m_bStart = true;
+  else if (sToken.toString() == "stop") myProtocol.m_bStart = false;
 }
 
 String bthCommRx() {
