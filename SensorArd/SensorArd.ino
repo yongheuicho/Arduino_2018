@@ -89,11 +89,11 @@ String sensorProtocolTx(MySensor & mySensor, MyProtocol & myProtocol) {
 }
 
 void bthCommTx(String & sSensor) {
-  serialBth.println(sSensor);
+  if (sSensor.length() > 0) serialBth.println(sSensor);
 }
 
 void serialCommTx(String & sSensor) {
-  Serial.println(sSensor);
+  if (sSensor.length() > 0) Serial.println(sSensor);
 }
 
 void sensorProtocolRx(String & sSensor, MyProtocol & myProtocol) {
