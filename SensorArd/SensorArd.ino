@@ -7,6 +7,7 @@
 #define SERIAL_BTH_BPS  (115200)
 #define ARD_BTH_RX    (10)
 #define ARD_BTH_TX    (11)
+#define VOLT_PREC   (1000)
 
 // Sensor 설정값, 측정값
 class MySensor {
@@ -91,7 +92,13 @@ void sensorMeas(MySensor & mySensor, MyProtocol & myProtocol) {
 
 // Voltage sensor
 double getSensor0(MySensor & mySensor, MyProtocol & myProtocol) {
-  return 0.;
+  return getVolt(mySensor.m_nPort[0]);
+}
+
+double getVolt(int nPort) {
+  int nVolt = analogRead(nPort);
+  double volt = map(nVolt, 0, 1023, 0, 5 * VOLT_PREC) / (double)VOLT_PREC;
+  return volt;
 }
 
 // Pressure sensor
