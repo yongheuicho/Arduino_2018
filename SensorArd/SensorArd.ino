@@ -80,7 +80,28 @@ void initBth() {
 }
 
 void sensorMeas(MySensor & mySensor, MyProtocol & myProtocol) {
+  if (!myProtocol.m_bStart) return;
+  if (mySensor.m_bPort[0])  // Sensor #0?
+    mySensor.m_val1[0] = getSensor0(mySensor, myProtocol);
+  if (mySensor.m_bPort[1])  // Sensor #1?
+    mySensor.m_val1[1] = getSensor1(mySensor, myProtocol);
+  if (mySensor.m_bPort[2])  // Sensor #2?
+    mySensor.m_val1[2] = getSensor2(mySensor, myProtocol);    
+}
 
+// Voltage sensor
+double getSensor0(MySensor & mySensor, MyProtocol & myProtocol) {
+  return 0.;
+}
+
+// Pressure sensor
+double getSensor1(MySensor & mySensor, MyProtocol & myProtocol) {
+  return 0.;
+}
+
+// Temperature sensor
+double getSensor2(MySensor & mySensor, MyProtocol & myProtocol) {
+  return 0.;
 }
 
 String sensorProtocolTx(MySensor & mySensor, MyProtocol & myProtocol) {
