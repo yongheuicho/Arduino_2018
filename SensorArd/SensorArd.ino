@@ -1,3 +1,6 @@
+/////////////////////////////////////////////
+// 1. Sensor port pin 정보를 바꾸고 싶으면 initSensorPort() 함수에서 조정
+/////////////////////////////////////////////
 #include <StringTok.h>
 #define NUM_SENSOR_ARD  (3)
 
@@ -13,7 +16,7 @@ class MySensor {
 class MyProtocol {
   public:
     boolean m_bStart; // true: 통신 mode, false: 설정 mode
-    int m_nDelay, m_nAvgSize, m_nDelayAvg;  
+    int m_nDelay, m_nAvgSize, m_nDelayAvg;
 };
 
 // 전역 변수(global variables)
@@ -41,11 +44,25 @@ void loop() {
 }
 
 void initSensor(MySensor & mySensor) {
+  for (int i = 0; i < NUM_SENSOR_ARD; i++) {
+    mySensor.m_bPort[i] = true;
+    mySensor.m_val1[i] = 0.;
+    mySensor.m_val2[i] = 0.;
+  }
+  initSensorPort(mySensor);
+}
 
+void initSensorPort(MySensor & mySensor) {
+  mySensor.m_nPort[0] = A0; // Voltage sensor 
+  mySensor.m_nPort[1] = A1; // Pressure sensor
+  mySensor.m_nPort[2] = A2; // Temperature sensor
 }
 
 void initProtocol(MyProtocol & myProtocol) {
-
+  myProtocol.m_bStart = false;
+  myProtocol.m_nDelay = 1000;
+  myProtocol.m_nAvgSize = 1;
+  myProtocol.m_nDelayAvg = 10;
 }
 
 void initSerial() {
