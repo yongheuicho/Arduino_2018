@@ -47,7 +47,7 @@ void loop() {
   // Rx
   sSensor = bthCommRx();
   serialCommTx(sSensor);
-  sensorProtocolRx(sSensor, g_myProtocol);
+  sensorProtocolRx(sSensor, g_mySensor, g_myProtocol);
   // Delay
   delay(g_myProtocol.m_nDelay);
 }
@@ -62,7 +62,7 @@ void initSensor(MySensor & mySensor) {
 }
 
 void initSensorPort(MySensor & mySensor) {
-  mySensor.m_nPort[0] = A0; // Voltage sensor 
+  mySensor.m_nPort[0] = A0; // Voltage sensor
   mySensor.m_nPort[1] = A1; // Pressure sensor
   mySensor.m_nPort[2] = A2; // Temperature sensor
 }
@@ -89,7 +89,7 @@ void sensorMeas(MySensor & mySensor, MyProtocol & myProtocol) {
   if (mySensor.m_bPort[1])  // Sensor #1?
     mySensor.m_val1[1] = getSensor1(mySensor, myProtocol);
   if (mySensor.m_bPort[2])  // Sensor #2?
-    mySensor.m_val1[2] = getSensor2(mySensor, myProtocol);    
+    mySensor.m_val1[2] = getSensor2(mySensor, myProtocol);
 }
 
 // Voltage sensor
@@ -115,13 +115,13 @@ double getSensor2(MySensor & mySensor, MyProtocol & myProtocol) {
 
 String sensorProtocolTx(MySensor & mySensor, MyProtocol & myProtocol) {
   if (!myProtocol.m_bStart) return "";
-  String sSensor; 
+  String sSensor;
   if (mySensor.m_bPort[0])  // Sensor #0?
-    sSensor = "getsen 0 " + String(mySensor.m_val1[0], 5) + "\n";  
+    sSensor += "getsen 0 " + String(mySensor.m_val1[0], 5) + "\r\n";
   if (mySensor.m_bPort[1])  // Sensor #1?
-    sSensor = "getsen 1 " + String(mySensor.m_val1[1], 5) + "\n";  
+    sSensor += "getsen 1 " + String(mySensor.m_val1[1], 5) + "\r\n";
   if (mySensor.m_bPort[2])  // Sensor #2?
-    sSensor = "getsen 2 " + String(mySensor.m_val1[2], 5) + "\n";        
+    sSensor += "getsen 2 " + String(mySensor.m_val1[2], 5) + "\r\n";
   return sSensor;
 }
 
@@ -133,13 +133,28 @@ void serialCommTx(String & sSensor) {
   if (sSensor.length() > 0) Serial.println(sSensor);
 }
 
-void sensorProtocolRx(String & sSensor, MyProtocol & myProtocol) {
+void sensorProtocolRx(String & sSensor, MySensor & mySensor, MyProtocol & myProtocol) {
   if (sSensor.length() <= 0)  return;
   StringTok sInput(sSensor);
   StringTok sToken;
   sToken = sInput.getToken();
   if (sToken.toString() == "start") myProtocol.m_bStart = true;
   else if (sToken.toString() == "stop") myProtocol.m_bStart = false;
+  else if (sToken.toString() == "setsen") protoSetSen(sInput, mySensor);  // ex: setsen 0 on
+}
+
+// ex: setsen 0 on
+void protoSetSen(StringTok & sInput, MySensor & mySensor) {
+  StringTok sToken;
+  int nPort;
+  boolean bPort;
+  sToken = sInput.getToken(); nPort = sToken.atoi();
+  Serial.println(sToken.toString());
+  sToken = sInput.getToken();
+  Serial.println(sToken.toString());
+  if (sToken.toString() == "on")  bPort = true;
+  else if (sToken.toString() == "off")  bPort = false;
+  mySensor.m_bPort[nPort] = bPort;
 }
 
 String bthCommRx() {
