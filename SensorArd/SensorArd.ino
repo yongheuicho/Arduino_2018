@@ -141,6 +141,7 @@ void sensorProtocolRx(String & sSensor, MySensor & mySensor, MyProtocol & myProt
   if (sToken.toString() == "start") myProtocol.m_bStart = true;
   else if (sToken.toString() == "stop") myProtocol.m_bStart = false;
   else if (sToken.toString() == "setsen") protoSetSen(sInput, mySensor);  // ex: setsen 0 on
+  else if (sToken.toString() == "delay")  protoDelay(sInput, myProtocol); // ex: delay 3000
 }
 
 // ex: setsen 0 on
@@ -149,12 +150,18 @@ void protoSetSen(StringTok & sInput, MySensor & mySensor) {
   int nPort;
   boolean bPort;
   sToken = sInput.getToken(); nPort = sToken.atoi();
-  Serial.println(sToken.toString());
   sToken = sInput.getToken();
-  Serial.println(sToken.toString());
   if (sToken.toString() == "on")  bPort = true;
   else if (sToken.toString() == "off")  bPort = false;
   mySensor.m_bPort[nPort] = bPort;
+}
+
+// ex: delay 3000
+void protoDelay(StringTok & sInput, MyProtocol & myProtocol) {
+  StringTok sToken;
+  int nDelay;
+  sToken = sInput.getToken(); nDelay = sToken.atoi();
+  myProtocol.m_nDelay = nDelay;  
 }
 
 String bthCommRx() {
