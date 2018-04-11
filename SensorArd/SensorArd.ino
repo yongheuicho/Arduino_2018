@@ -16,12 +16,14 @@ class MySensor {
     boolean m_bPort[NUM_SENSOR_ARD];
     double m_val1[NUM_SENSOR_ARD];
     double m_val2[NUM_SENSOR_ARD];
+    int m_nAvgSize[NUM_SENSOR_ARD];
+    int m_nDelayAvg[NUM_SENSOR_ARD];
 };
 
 class MyProtocol {
   public:
     boolean m_bStart; // true: 통신 mode, false: 설정 mode
-    int m_nDelay, m_nAvgSize, m_nDelayAvg;
+    int m_nDelay;
 };
 
 // 전역 변수(global variables)
@@ -57,6 +59,8 @@ void initSensor(MySensor & mySensor) {
     mySensor.m_bPort[i] = true;
     mySensor.m_val1[i] = 0.;
     mySensor.m_val2[i] = 0.;
+    mySensor.m_nAvgSize[i] = 1;
+    mySensor.m_nDelayAvg[i] = 10;
   }
   initSensorPort(mySensor);
 }
@@ -70,8 +74,6 @@ void initSensorPort(MySensor & mySensor) {
 void initProtocol(MyProtocol & myProtocol) {
   myProtocol.m_bStart = false;
   myProtocol.m_nDelay = 1000;
-  myProtocol.m_nAvgSize = 1;
-  myProtocol.m_nDelayAvg = 10;
 }
 
 void initSerial() {
@@ -142,6 +144,7 @@ void sensorProtocolRx(String & sSensor, MySensor & mySensor, MyProtocol & myProt
   else if (sToken.toString() == "stop") myProtocol.m_bStart = false;
   else if (sToken.toString() == "setsen") protoSetSen(sInput, mySensor);  // ex: setsen 0 on
   else if (sToken.toString() == "delay")  protoDelay(sInput, myProtocol); // ex: delay 3000
+  else if (sToken.toString() == "avgsize") protoAvgSize(sInput, mySensor);  // ex: avgsize 0 100
 }
 
 // ex: setsen 0 on
@@ -162,6 +165,15 @@ void protoDelay(StringTok & sInput, MyProtocol & myProtocol) {
   int nDelay;
   sToken = sInput.getToken(); nDelay = sToken.atoi();
   myProtocol.m_nDelay = nDelay;  
+}
+
+// ex: avgsize 0 100
+void protoAvgSize(StringTok & sInput, MySensor & mySensor) {
+  StringTok sToken;
+  int nPort, nAvgSize;
+  sToken = sInput.getToken(); nPort = sToken.atoi();
+  sToken = sInput.getToken(); nAvgSize = sToken.atoi();
+  mySensor.m_nAvgSize[nPort] = nAvgSize;
 }
 
 String bthCommRx() {
