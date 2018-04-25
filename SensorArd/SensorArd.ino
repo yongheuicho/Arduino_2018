@@ -94,9 +94,19 @@ void sensorMeas(MySensor & mySensor, MyProtocol & myProtocol) {
     mySensor.m_val1[2] = getSensor2(mySensor, myProtocol);
 }
 
+double getSensorAvg(int nSensor, MySensor & mySensor, MyProtocol & myProtocol) {
+  double sum = 0.;
+  for (int i = 0; i < mySensor.m_nAvgSize[nSensor]; i++)
+  {
+    sum += getVolt(mySensor.m_nPort[nSensor]);
+    delay(mySensor.m_nDelayAvg[nSensor]);
+  }
+  return sum/(double)mySensor.m_nAvgSize[nSensor];
+}
+
 // Voltage sensor
 double getSensor0(MySensor & mySensor, MyProtocol & myProtocol) {
-  return getVolt(mySensor.m_nPort[0]);
+  return getSensorAvg(0, mySensor, myProtocol);
 }
 
 double getVolt(int nPort) {
@@ -107,12 +117,12 @@ double getVolt(int nPort) {
 
 // Pressure sensor
 double getSensor1(MySensor & mySensor, MyProtocol & myProtocol) {
-  return 0.;
+  return getSensorAvg(1, mySensor, myProtocol);
 }
 
 // Temperature sensor
 double getSensor2(MySensor & mySensor, MyProtocol & myProtocol) {
-  return 0.;
+  return getSensorAvg(2, mySensor, myProtocol);
 }
 
 String sensorProtocolTx(MySensor & mySensor, MyProtocol & myProtocol) {
