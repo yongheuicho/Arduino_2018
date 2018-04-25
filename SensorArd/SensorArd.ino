@@ -155,6 +155,7 @@ void sensorProtocolRx(String & sSensor, MySensor & mySensor, MyProtocol & myProt
   else if (sToken.toString() == "setsen") protoSetSen(sInput, mySensor);  // ex: setsen 0 on
   else if (sToken.toString() == "delay")  protoDelay(sInput, myProtocol); // ex: delay 3000
   else if (sToken.toString() == "avgsize") protoAvgSize(sInput, mySensor);  // ex: avgsize 0 100
+  else if (sToken.toString() == "delayavg") protoDelayAvg(sInput, mySensor);  // ex: delayavg 0 5
 }
 
 // ex: setsen 0 on
@@ -184,6 +185,15 @@ void protoAvgSize(StringTok & sInput, MySensor & mySensor) {
   sToken = sInput.getToken(); nPort = sToken.atoi();
   sToken = sInput.getToken(); nAvgSize = sToken.atoi();
   mySensor.m_nAvgSize[nPort] = nAvgSize;
+}
+
+// ex: delayavg 0 5
+void protoDelayAvg(StringTok & sInput, MySensor & mySensor) {
+  StringTok sToken;
+  int nPort, nDelayAvg;
+  sToken = sInput.getToken(); nPort = sToken.atoi();
+  sToken = sInput.getToken(); nDelayAvg = sToken.atoi();
+  mySensor.m_nDelayAvg[nPort] = nDelayAvg;
 }
 
 String bthCommRx() {
