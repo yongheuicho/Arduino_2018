@@ -1,3 +1,9 @@
+/*-------------------------------------------------------------------
+  StringTok.h: String with Token Operation for Arduino Boards Including Arduino Mega
+  Copyright ⓒ 2016-Forever ACE Lab, Korea.
+  All Rights Reserved. Personal and non-commercial purpose only.
+  -------------------------------------------------------------------*/
+
 #pragma once
 
 #include <Arduino.h>
